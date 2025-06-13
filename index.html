@@ -68,12 +68,7 @@
     }
   </style>
 </head>
-<body>
-
-<div style="text-align:center;">
-  <img src="logo.png" alt="Ajman Transport Logo" style="max-width:200px; margin-bottom: 20px;">
-</div>
-
+<body data-lang="en">
   <div class="lang-switch">
     <button onclick="toggleLang()">عربي / English</button>
   </div>
@@ -175,10 +170,8 @@
 
     
 function toggleLang() {
-  const lang = document.body.getAttribute("data-lang");
-  let next = "ar";
-  if (lang === "ar") next = "ur";
-  else if (lang === "ur") next = "en";
+  const current = document.body.getAttribute("data-lang") || "en";
+  let next = current === "en" ? "ar" : current === "ar" ? "ur" : "en";
 
   document.body.setAttribute("data-lang", next);
   document.body.classList.toggle("rtl", next !== "en");
