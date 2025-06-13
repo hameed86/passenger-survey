@@ -270,6 +270,38 @@ function showGPSAlert() {
   document.body.prepend(alertBox);
 }
 
+
+let gpsRetryInterval = null;
+
+function tryGetLocation() {
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      if (gpsRetryInterval) clearInterval(gpsRetryInterval);
+      document.getElementById("latitude").value = position.coords.latitude;
+      document.getElementById("longitude").value = position.coords.longitude;
+      console.log("GPS acquired:", position.coords.latitude, position.coords.longitude);
+    },
+    error => {
+      showGPSAlert();
+    }
+  );
+}
+
+window.addEventListener("load", () => {
+  tryGetLocation();
+  gpsRetryInterval = setInterval(tryGetLocation, 5000); // retry every 5 seconds
+});
+
+
+document.getElementById("languageSelect").addEventListener("change", function () {
+  const lang = this.value;
+  document.documentElement.dir = (lang === 'ar' || lang === 'ur') ? 'rtl' : 'ltr';
+
+  document.querySelectorAll("[data-lang-en]").forEach(el => {
+    el.innerHTML = el.getAttribute("data-lang-" + lang);
+  });
+});
+
 </script>
 </body>
 </html>
