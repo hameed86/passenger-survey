@@ -134,13 +134,7 @@
 
     window.onload = function () {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-  position => {
-    // success
-  },
-  error => {
-    showGPSAlert();
-  }function (position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
           latitude = position.coords.latitude;
           longitude = position.coords.longitude;
         }, function () {
@@ -238,95 +232,6 @@
       document.getElementById("q5Label").innerText = t.q5;
     }
 
-
-function showGPSAlert() {
-  const lang = document.getElementById("languageSelect").value;
-  let message = "";
-
-  if (lang === "ar") {
-    message = "📍 <b>يرجى السماح بالوصول إلى الموقع الجغرافي لتحسين الخدمة في منطقتك. ثم قم بإعادة تحميل الصفحة.</b>";
-  } else if (lang === "ur") {
-    message = "📍 <b>براہ کرم سروس کو بہتر بنانے کے لیے لوکیشن کی اجازت دیں اور صفحہ دوبارہ لوڈ کریں۔</b>";
-  } else {
-    message = "📍 <b>GPS location is required to improve the service in your area. Please allow access and refresh the page.</b>";
-  }
-
-  const alertBox = document.createElement("div");
-  alertBox.innerHTML = message;
-  alertBox.style.cssText = `
-    background: #fff3cd;
-    color: #856404;
-    border: 2px solid #ffeeba;
-    padding: 16px;
-    margin: 20px auto;
-    max-width: 90%;
-    font-weight: bold;
-    font-family: 'Arial', sans-serif;
-    font-size: 16px;
-    text-align: center;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  `;
-  document.body.prepend(alertBox);
-}
-
-
-let gpsRetryInterval = null;
-
-function tryGetLocation() {
-  navigator.geolocation.getCurrentPosition(
-    position => {
-      if (gpsRetryInterval) clearInterval(gpsRetryInterval);
-      document.getElementById("latitude").value = position.coords.latitude;
-      document.getElementById("longitude").value = position.coords.longitude;
-      console.log("GPS acquired:", position.coords.latitude, position.coords.longitude);
-    },
-    error => {
-      showGPSAlert();
-    }
-  );
-}
-
-window.addEventListener("load", () => {
-  tryGetLocation();
-  gpsRetryInterval = setInterval(tryGetLocation, 5000); // retry every 5 seconds
-});
-
-
-
-document.getElementById("languageSelect").addEventListener("change", function () {
-  const lang = this.value;
-  document.documentElement.dir = (lang === 'ar' || lang === 'ur') ? 'rtl' : 'ltr';
-
-  // Update all text with data-lang-[code]
-  document.querySelectorAll("[data-lang-en]").forEach(el => {
-    const translation = el.getAttribute("data-lang-" + lang);
-    if (translation) el.innerHTML = translation;
-  });
-});
-
 </script>
-
-<script>
-function applyLanguage(lang) {
-  document.documentElement.dir = (lang === 'ar' || lang === 'ur') ? 'rtl' : 'ltr';
-
-  document.querySelectorAll("[data-lang-en]").forEach(el => {
-    const translation = el.getAttribute("data-lang-" + lang);
-    if (translation) el.innerHTML = translation;
-  });
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  const select = document.getElementById("languageSelect");
-  if (select) {
-    applyLanguage(select.value);
-    select.addEventListener("change", function () {
-      applyLanguage(this.value);
-    });
-  }
-});
-</script>
-
 </body>
 </html>
