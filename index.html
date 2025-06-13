@@ -306,5 +306,27 @@ document.getElementById("languageSelect").addEventListener("change", function ()
 });
 
 </script>
+
+<script>
+function applyLanguage(lang) {
+  document.documentElement.dir = (lang === 'ar' || lang === 'ur') ? 'rtl' : 'ltr';
+
+  document.querySelectorAll("[data-lang-en]").forEach(el => {
+    const translation = el.getAttribute("data-lang-" + lang);
+    if (translation) el.innerHTML = translation;
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const select = document.getElementById("languageSelect");
+  if (select) {
+    applyLanguage(select.value);
+    select.addEventListener("change", function () {
+      applyLanguage(this.value);
+    });
+  }
+});
+</script>
+
 </body>
 </html>
