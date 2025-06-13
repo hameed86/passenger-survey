@@ -293,12 +293,15 @@ window.addEventListener("load", () => {
 });
 
 
+
 document.getElementById("languageSelect").addEventListener("change", function () {
   const lang = this.value;
   document.documentElement.dir = (lang === 'ar' || lang === 'ur') ? 'rtl' : 'ltr';
 
+  // Update all text with data-lang-[code]
   document.querySelectorAll("[data-lang-en]").forEach(el => {
-    el.innerHTML = el.getAttribute("data-lang-" + lang);
+    const translation = el.getAttribute("data-lang-" + lang);
+    if (translation) el.innerHTML = translation;
   });
 });
 
