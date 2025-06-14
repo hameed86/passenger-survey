@@ -190,8 +190,9 @@
         return;
       }
 
-      document.getElementById("spinner").style.display = "block";
+      const spinner = document.getElementById("spinner");
       const submitButton = document.querySelector('input[type="submit"]');
+      spinner.style.display = "block";
       submitButton.disabled = true;
 
       const formData = new FormData(this);
@@ -218,7 +219,7 @@
         alert(isRTL ? "❌ فشل الإرسال. الرجاء المحاولة مرة أخرى." : "❌ Submission failed. Please try again.");
       })
       .finally(() => {
-        document.getElementById("spinner").style.display = "none";
+        spinner.style.display = "none";
         submitButton.disabled = false;
       });
     });
