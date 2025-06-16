@@ -1,262 +1,286 @@
+
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Passenger Survey</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f8f9fa, #e9ecef);
       margin: 0;
       padding: 0;
     }
-    .container {
-      max-width: 700px;
-      margin: 20px auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .header {
+    header {
       display: flex;
       align-items: center;
-      margin-bottom: 20px;
-    }
-    .header img {
-      width: 70px;
-      margin-right: 15px;
-    }
-    .header h2 {
-      margin: 0;
-    }
-    .info-banner {
-      background: #e6f7ff;
-      padding: 10px;
-      border-left: 5px solid #1890ff;
-      margin-bottom: 20px;
-      border-radius: 5px;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 5px;
-    }
-    select, input {
-      width: 100%;
-      padding: 8px;
-      font-size: 1em;
-    }
-    .submit-btn {
-      background: green;
+      justify-content: space-between;
+      background-color: #007BFF;
+      padding: 10px 20px;
       color: white;
-      padding: 10px;
-      font-size: 1em;
+    }
+    header img {
+      height: 40px;
+    }
+    .lang-switch button {
+      background-color: #28a745;
       border: none;
-      width: 100%;
+      color: white;
+      padding: 6px 12px;
+      font-weight: bold;
       border-radius: 5px;
       cursor: pointer;
     }
-    .spinner {
+    form {
+      background-color: white;
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 20px rgba(0,0,0,0.1);
+    }
+    h2 {
       text-align: center;
-      margin-top: 10px;
+      color: #007BFF;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    select, input[type="text"], input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .note {
+      background-color: #fff3cd;
+      border: 1px solid #ffeeba;
+      color: #856404;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+    #spinner {
       display: none;
+      text-align: center;
+      margin: 15px;
+    }
+    .loader {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #007BFF;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
     .rtl {
       direction: rtl;
       text-align: right;
     }
-    .lang-switch {
-      margin-bottom: 20px;
-    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <img src="logo.png" alt="Logo">
-      <h2 id="formTitle">🚌 Passenger Feedback Survey</h2>
+  <header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Logo-ajman-ar.png/320px-Logo-ajman-ar.png" alt="Logo" />
+    <div class="lang-switch"><button onclick="cycleLang()">English / عربي / اردو</button></div>
+  </header>
+
+  <div id="spinner"><div class="loader"></div></div>
+
+  <form id="surveyForm">
+    <h2 id="formTitle">🚌 Passenger Feedback Survey</h2>
+
+    <div class="note" id="gpsNote">
+      📍 Please enable GPS when prompted. It helps us improve transport services in your area.
     </div>
 
-    <div class="info-banner" id="gpsNote">
-      📍 Please enable GPS. It helps us improve public transport in your area.
-    </div>
+    <label id="q1Label">1. How satisfied are you with the service?</label>
+    <select name="satisfaction" required>
+      <option value="">--Choose--</option>
+      <option value="Very Satisfied">Very Satisfied</option>
+      <option value="Satisfied">Satisfied</option>
+      <option value="Neutral">Neutral</option>
+      <option value="Unsatisfied">Unsatisfied</option>
+      <option value="Very Unsatisfied">Very Unsatisfied</option>
+    </select>
 
-    <div class="lang-switch">
-      🌐 <label for="langSelect" style="font-weight: bold;">Select Language:</label>
-      <select id="langSelect" onchange="changeLanguage()">
-        <option value="en">English</option>
-        <option value="ar">العربية</option>
-        <option value="ur">اردو</option>
-      </select>
-    </div>
+    <label id="q2Label">2. What is the purpose of your trip?</label>
+    <input type="text" name="tripPurpose" required>
 
-    <form id="surveyForm">
-      <div class="form-group"><label id="q1Label" for="q1">1. How satisfied are you with the service?</label>
-        <select id="q1" name="q1" required>
-          <option value="">-- Select --</option>
-          <option>Very satisfied</option>
-          <option>Satisfied</option>
-          <option>Neutral</option>
-          <option>Unsatisfied</option>
-        </select>
-      </div>
+    <label id="q3Label">3. How often do you use public transport?</label>
+    <select name="frequency" required>
+      <option value="">--Choose--</option>
+      <option value="Daily">Daily</option>
+      <option value="Weekly">Weekly</option>
+      <option value="Monthly">Monthly</option>
+      <option value="Rarely">Rarely</option>
+    </select>
 
-      <div class="form-group"><label id="q2Label" for="q2">2. What is the purpose of your trip?</label>
-        <input type="text" id="q2" name="q2" required>
-      </div>
+    <label id="q4Label">4. Gender</label>
+    <select name="gender" required>
+      <option value="">--Choose--</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
 
-      <div class="form-group"><label id="q3Label" for="q3">3. How often do you use public transport?</label>
-        <select id="q3" name="q3" required>
-          <option value="">-- Select --</option>
-          <option>Daily</option>
-          <option>Weekly</option>
-          <option>Monthly</option>
-          <option>Rarely</option>
-        </select>
-      </div>
+    <label id="q5Label">5. Your age group</label>
+    <select name="age" required>
+      <option value="">--Choose--</option>
+      <option value="Under 18">Under 18</option>
+      <option value="18–30">18–30</option>
+      <option value="31–45">31–45</option>
+      <option value="46–60">46–60</option>
+      <option value="Above 60">Above 60</option>
+    </select>
 
-      <div class="form-group"><label id="q4Label" for="q4">4. Gender</label>
-        <select id="q4" name="q4" required>
-          <option value="">-- Select --</option>
-          <option>Male</option>
-          <option>Female</option>
-          <option>Prefer not to say</option>
-        </select>
-      </div>
+    <input type="submit" class="button" value="Submit Survey">
+  </form>
 
-      <div class="form-group"><label id="q5Label" for="q5">5. Your age group</label>
-        <select id="q5" name="q5" required>
-          <option value="">-- Select --</option>
-          <option>Under 18</option>
-          <option>18-25</option>
-          <option>26-40</option>
-          <option>41-60</option>
-          <option>60+</option>
-        </select>
-      </div>
+  <script>
+    let latitude = "";
+    let longitude = "";
+    let langIndex = 0;
+    const langs = ["en", "ar", "ur"];
 
-      <input type="hidden" name="latitude" id="latitude">
-      <input type="hidden" name="longitude" id="longitude">
-
-      <button class="submit-btn" type="submit">Submit</button>
-      <div class="spinner" id="spinner"><img src="https://i.imgur.com/llF5iyg.gif" width="40"/></div>
-    </form>
-  </div>
-
-<script>
-const translations = {
-  en: {
-    title: "🚌 Passenger Feedback Survey",
-    gps: "📍 Please enable GPS. It helps us improve public transport in your area.",
-    q1: "1. How satisfied are you with the service?",
-    q2: "2. What is the purpose of your trip?",
-    q3: "3. How often do you use public transport?",
-    q4: "4. Gender",
-    q5: "5. Your age group",
-    safari: "📱 You're using Safari on iPhone.
-📍 Please allow location access.
-Settings → Safari → Location → Allow."
-  },
-  ar: {
-    title: "🚌 استبيان رضا الركاب",
-    gps: "📍 الرجاء تمكين GPS لتحسين خدمات النقل العام في منطقتك.",
-    q1: "1. ما مدى رضاك عن الخدمة؟",
-    q2: "2. ما هو الغرض من رحلتك؟",
-    q3: "3. كم مرة تستخدم وسائل النقل العام؟",
-    q4: "4. الجنس",
-    q5: "5. الفئة العمرية",
-    safari: "📱 تستخدم Safari على iPhone.
-📍 الرجاء تمكين الوصول إلى الموقع.
-الإعدادات → Safari → الموقع → السماح"
-  },
-  ur: {
-    title: "🚌 مسافر کی رائے کا سروے",
-    gps: "📍 براہ کرم GPS کو فعال کریں تاکہ ہم آپ کے علاقے میں پبلک ٹرانسپورٹ کو بہتر بنا سکیں۔",
-    q1: "1. آپ سروس سے کتنے مطمئن ہیں؟",
-    q2: "2. آپ کے سفر کا مقصد کیا ہے؟",
-    q3: "3. آپ کتنی بار پبلک ٹرانسپورٹ استعمال کرتے ہیں؟",
-    q4: "4. جنس",
-    q5: "5. آپ کی عمر کا گروپ",
-    safari: "📱 آپ iPhone Safari استعمال کر رہے ہیں۔
-📍 براہ کرم لوکیشن کی اجازت دیں۔
-Settings → Safari → Location → Allow"
-  }
-};
-
-function changeLanguage() {
-  const lang = document.getElementById("langSelect").value;
-  const t = translations[lang];
-  document.body.dir = lang === "ar" || lang === "ur" ? "rtl" : "ltr";
-
-  document.getElementById("formTitle").innerText = t.title;
-  document.getElementById("gpsNote").innerText = t.gps;
-  document.getElementById("q1Label").innerText = t.q1;
-  document.getElementById("q2Label").innerText = t.q2;
-  document.getElementById("q3Label").innerText = t.q3;
-  document.getElementById("q4Label").innerText = t.q4;
-  document.getElementById("q5Label").innerText = t.q5;
-}
-
-function detectiPhoneSafari(lang) {
-  const isIOS = /iP(hone|od|ad)/.test(navigator.platform);
-  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  if (isIOS && isSafari) {
-    alert(translations[lang].safari);
-  }
-}
-
-window.onload = () => {
-  const browserLang = navigator.language.slice(0, 2);
-  const selectedLang = ["en", "ar", "ur"].includes(browserLang) ? browserLang : "en";
-  document.getElementById("langSelect").value = selectedLang;
-  changeLanguage();
-  detectiPhoneSafari(selectedLang);
-  captureLocation();
-};
-
-function captureLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        document.getElementById("latitude").value = position.coords.latitude;
-        document.getElementById("longitude").value = position.coords.longitude;
+    const translations = {
+      en: {
+        title: "🚌 Passenger Feedback Survey",
+        gps: "📍 Please enable GPS when prompted. It helps us improve transport services in your area.",
+        q1: "1. How satisfied are you with the service?",
+        q2: "2. What is the purpose of your trip?",
+        q3: "3. How often do you use public transport?",
+        q4: "4. Gender",
+        q5: "5. Your age group",
+        alert: "⚠️ Please enable GPS and refresh the page again to submit the survey.",
+        thank: "✅ Thank you! Your feedback has been submitted.",
+        error: "❌ Submission failed. Please try again."
       },
-      () => {
-        alert("📍 Please enable GPS and reload the page.");
+      ar: {
+        title: "🚌 استبيان رضا الركاب",
+        gps: "📍 الرجاء السماح بالوصول إلى الموقع الجغرافي لتحسين خدمات النقل.",
+        q1: "1. ما مدى رضاك عن الخدمة؟",
+        q2: "2. ما هو الغرض من رحلتك؟",
+        q3: "3. كم مرة تستخدم وسائل النقل العام؟",
+        q4: "4. الجنس",
+        q5: "5. الفئة العمرية",
+        alert: "⚠️ الرجاء تفعيل GPS وتحديث الصفحة لتقديم الاستبيان.",
+        thank: "✅ شكراً لك! تم إرسال الاستبيان بنجاح.",
+        error: "❌ فشل الإرسال. الرجاء المحاولة مرة أخرى."
+      },
+      ur: {
+        title: "🚌 مسافر کی رائے کا سروے",
+        gps: "📍 براہ کرم جی پی ایس کو فعال کریں۔ یہ آپ کے علاقے میں ٹرانسپورٹ سروس کو بہتر بنانے میں مدد کرے گا۔",
+        q1: "1. آپ سروس سے کتنے مطمئن ہیں؟",
+        q2: "2. آپ کے سفر کا مقصد کیا ہے؟",
+        q3: "3. آپ کتنی بار عوامی ٹرانسپورٹ استعمال کرتے ہیں؟",
+        q4: "4. جنس",
+        q5: "5. آپ کی عمر کا گروپ",
+        alert: "⚠️ براہ کرم جی پی ایس کو فعال کریں اور صفحہ کو دوبارہ لوڈ کریں۔",
+        thank: "✅ شکریہ! آپ کی رائے موصول ہو گئی ہے۔",
+        error: "❌ ارسال ناکام۔ دوبارہ کوشش کریں۔"
       }
-    );
-  }
-}
+    };
 
-document.getElementById("surveyForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const lat = document.getElementById("latitude").value;
-  const lng = document.getElementById("longitude").value;
-  if (!lat || !lng) {
-    alert("❌ GPS location not available. Please allow GPS access.");
-    return;
-  }
-  document.getElementById("spinner").style.display = "block";
-  const formData = new FormData(this);
-  try {
-    const res = await fetch("https://script.google.com/macros/s/AKfycbzE9RBdLsOaNdo_nJ-6o4deMCp9VnCuBar8dRhd5LvNlMhdxiR5LmqkJZTCyUe3omWD/exec", {
-      method: "POST",
-      body: formData
+    function applyLang() {
+      const lang = langs[langIndex];
+      const t = translations[lang];
+      document.getElementById("formTitle").innerText = t.title;
+      document.getElementById("gpsNote").innerText = t.gps;
+      document.getElementById("q1Label").innerText = t.q1;
+      document.getElementById("q2Label").innerText = t.q2;
+      document.getElementById("q3Label").innerText = t.q3;
+      document.getElementById("q4Label").innerText = t.q4;
+      document.getElementById("q5Label").innerText = t.q5;
+      document.body.classList.toggle("rtl", lang !== "en");
+    }
+
+    function cycleLang() {
+      langIndex = (langIndex + 1) % langs.length;
+      applyLang();
+    }
+
+    function showGPSAlert() {
+      const lang = langs[langIndex];
+      alert(translations[lang].alert);
+    }
+
+    function isiOS() {
+      return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    }
+
+    window.onload = function () {
+      const userLang = navigator.language || navigator.userLanguage;
+      if (userLang.startsWith("ar")) langIndex = 1;
+      else if (userLang.startsWith("ur")) langIndex = 2;
+      applyLang();
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          latitude = position.coords.latitude;
+          longitude = position.coords.longitude;
+        }, function () {
+          showGPSAlert();
+        });
+      } else {
+        showGPSAlert();
+      }
+
+      if (isiOS()) {
+        showGPSAlert();
+      }
+    };
+
+    document.getElementById("surveyForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const lang = langs[langIndex];
+      const t = translations[lang];
+
+      if (!latitude || !longitude) {
+        showGPSAlert();
+        return;
+      }
+
+      document.getElementById("spinner").style.display = "block";
+      const submitButton = document.querySelector('input[type="submit"]');
+      submitButton.disabled = true;
+
+      const formData = new FormData(this);
+      const data = {
+        satisfaction: formData.get("satisfaction"),
+        tripPurpose: formData.get("tripPurpose"),
+        frequency: formData.get("frequency"),
+        gender: formData.get("gender"),
+        age: formData.get("age"),
+        latitude,
+        longitude
+      };
+
+      fetch("https://script.google.com/macros/s/AKfycbzW9RC7bI7GYcUxOqOs58sT26_lO9JIcoiYLYeDoiY4k_cYESQYLm-LmGIzg4dRdTH7/exec", {
+        method: "POST",
+        body: JSON.stringify(data)
+      })
+      .then(res => res.text())
+      .then(response => {
+        alert(t.thank);
+        this.reset();
+      })
+      .catch(() => {
+        alert(t.error);
+      })
+      .finally(() => {
+        document.getElementById("spinner").style.display = "none";
+        submitButton.disabled = false;
+      });
     });
-    if (res.ok) {
-      alert("✅ Submitted successfully!");
-      this.reset();
-    } else throw new Error("Network error");
-  } catch {
-    alert("❌ Submission failed. Please try again.");
-  }
-  document.getElementById("spinner").style.display = "none";
-});
-</script>
+  </script>
 </body>
 </html>
