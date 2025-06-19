@@ -213,6 +213,62 @@
         });
       }
     };
-  </script>
+  
+    let langIndex = 0;
+    const langs = ["en", "ar", "ur"];
+
+    const translations = {
+      en: {
+        title: "🚌 Passenger Feedback Survey",
+        gps: "📍 Please enable GPS when prompted. It helps us improve transport services in your area.",
+        q1: "1. How satisfied are you with the service?",
+        q2: "2. What is the purpose of your trip?",
+        q3: "3. How often do you use public transport?",
+        q4: "4. Gender",
+        q5: "5. Your age group"
+      },
+      ar: {
+        title: "🚌 استبيان رضا الركاب",
+        gps: "📍 الرجاء السماح بالوصول إلى الموقع الجغرافي لتحسين خدمات النقل.",
+        q1: "1. ما مدى رضاك عن الخدمة؟",
+        q2: "2. ما هو الغرض من رحلتك؟",
+        q3: "3. كم مرة تستخدم وسائل النقل العام؟",
+        q4: "4. الجنس",
+        q5: "5. الفئة العمرية"
+      },
+      ur: {
+        title: "🚌 مسافر کی رائے کا سروے",
+        gps: "📍 براہ کرم جی پی ایس کو فعال کریں۔ یہ آپ کے علاقے میں ٹرانسپورٹ سروس کو بہتر بنانے میں مدد کرے گا۔",
+        q1: "1. آپ سروس سے کتنے مطمئن ہیں؟",
+        q2: "2. آپ کے سفر کا مقصد کیا ہے؟",
+        q3: "3. آپ کتنی بار عوامی ٹرانسپورٹ استعمال کرتے ہیں؟",
+        q4: "4. جنس",
+        q5: "5. آپ کی عمر کا گروپ"
+      }
+    };
+
+    function cycleLang() {
+      langIndex = (langIndex + 1) % langs.length;
+      applyLang();
+    }
+
+    function applyLang() {
+      const lang = langs[langIndex];
+      const t = translations[lang];
+      document.getElementById("formTitle").innerText = t.title;
+      document.getElementById("gpsNote").innerText = t.gps;
+      document.getElementById("q1Label").innerText = t.q1;
+      document.getElementById("q2Label").innerText = t.q2;
+      document.getElementById("q3Label").innerText = t.q3;
+      document.getElementById("q4Label").innerText = t.q4;
+      document.getElementById("q5Label").innerText = t.q5;
+      document.body.classList.toggle("rtl", lang !== "en");
+    }
+
+    const userLang = navigator.language || navigator.userLanguage;
+    if (userLang.startsWith("ar")) langIndex = 1;
+    else if (userLang.startsWith("ur")) langIndex = 2;
+    applyLang();
+</script>
 </body>
 </html>
